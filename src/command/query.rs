@@ -30,6 +30,7 @@ fn query_graylog(
     handlebars: &Handlebars,
     from: &str,
     to: &str,
+    limit: &str,
     query: &[String],
 ) -> Result<(), Error> {
     let client = graylog::node_client(node, node_name)?;
@@ -43,6 +44,7 @@ fn query_graylog(
     params.insert("limit", "0".into());
     params.insert("from", from);
     params.insert("to", to);
+    params.insert("limit", limit.into());
 
     graylog::run(&client, &params, &handlebars)?;
 
@@ -100,6 +102,7 @@ pub fn run(
     template: String,
     from: String,
     to: String,
+    limit: String,
     query: Vec<String>,
 ) -> Result<(), Error> {
     let (node, template) = match config {
@@ -113,7 +116,7 @@ pub fn run(
     let handlebars = template::compile(&template)?;
 
     match node {
-        Node::Graylog(node) => query_graylog(node, &node_name, &handlebars, &from, &to, &query),
+        Node::Graylog(node) => query_graylog(node, &node_name, &handlebars, &from, &to, &limit, &query),
         Node::Elastic(node) => query_elastic(node, &node_name, &handlebars, &from, &to, &query),
     }
 }

@@ -92,6 +92,7 @@ pub fn run<S: BuildHasher>(
 ) -> Result<(), Error> {
     let tuples: Vec<(&&str, &String)> = query.iter().collect();
     let client = client.try_clone().unwrap().query(&tuples);
+
     let response = match search::<Response>(client) {
         Ok(response) => response,
         Err(ResponseError::UnexpectedStatus(status, reason)) => {

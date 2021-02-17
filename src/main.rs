@@ -56,6 +56,9 @@ enum Command {
         #[structopt(long = "search-to", short = "#", default_value = "now")]
         to: String,
 
+        #[structopt(long = "limit", short = "l", default_value = "150")]
+        limit: String,
+
         #[structopt(name = "QUERY")]
         query: Vec<String>,
     },
@@ -111,8 +114,8 @@ fn main() -> Result<(), ExitFailure> {
             query,
         } => command::follow::run(config, cli.node, cli.template, from, latency, poll, query)?,
 
-        Command::Query { from, to, query } => {
-            command::query::run(config, cli.node, cli.template, from, to, query)?
+        Command::Query { from, to, limit, query } => {
+            command::query::run(config, cli.node, cli.template, from, to, limit, query)?
         }
     }
 
